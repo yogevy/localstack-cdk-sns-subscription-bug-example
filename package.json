@@ -5,10 +5,7 @@
     "localstack-cdk-sns-subscription-bug-example": "bin/localstack-cdk-sns-subscription-bug-example.js"
   },
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc -w",
-    "test": "jest",
-    "cdk": "cdk"
+    "build": "tsc"
   },
   "devDependencies": {
     "@types/jest": "^29.5.8",
