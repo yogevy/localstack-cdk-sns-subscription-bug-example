@@ -1,6 +1,6 @@
 # please run npm ci before running this script
 
-export LOCALSTACK_API_KEY=C8Mlxntop2
+export LOCALSTACK_API_KEY=xxxxx
 export DEFAULT_REGION=us-east-1
 export AWS_DEFAULT_ACCOUNT=000000000000
 
