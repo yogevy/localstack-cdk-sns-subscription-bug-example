@@ -1,7 +1,7 @@
 version: '3.0'
 services:
     localstack:
-        image: localstack/localstack-pro:3.0.0
+        image: localstack/localstack-pro:latest
         environment:
             - AWS_DEFAULT_REGION=us-east-1
             - LAMBDA_IGNORE_ARCHITECTURE=1

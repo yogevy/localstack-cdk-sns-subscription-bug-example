@@ -32,7 +32,7 @@ echo "***** test-topic subscriptions *****"
 awslocal sns list-subscriptions-by-topic --topic-arn arn:aws:sns:us-east-1:000000000000:test-topic.fifo
 
 echo "***** test-2-topic subscriptions *****"
-awslocal sns list-subscriptions-by-topic --topic-arn arn:aws:sns:us-east-1:000000000000:test-2-topic.fifo
+awslocal sns list-subscriptions-by-topic --topic-arn arn:aws:sns:us-east-1:000000000000:test-topic-2.fifo
 
 
 echo "***** update sqs subscription to both test-topic and test-2-topic *****"
@@ -42,5 +42,5 @@ echo "***** test-topic subscriptions *****"
 awslocal sns list-subscriptions-by-topic --topic-arn arn:aws:sns:us-east-1:000000000000:test-topic.fifo
 
 echo "***** test-2-topic subscriptions *****"
-awslocal sns list-subscriptions-by-topic --topic-arn arn:aws:sns:us-east-1:000000000000:test-2-topic.fifo
+awslocal sns list-subscriptions-by-topic --topic-arn arn:aws:sns:us-east-1:000000000000:test-topic-2.fifo
 
