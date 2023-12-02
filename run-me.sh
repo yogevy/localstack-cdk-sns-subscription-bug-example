@@ -12,6 +12,10 @@ fi
 echo "***** starting localstack container *****"
 docker-compose --project-directory localstack-pro up -d
 
+sleep 10
+
+cdklocal bootstrap aws://000000000000/us-east-1
+
 echo "***** deploy cdk topic *****"
 cd cdk/topics
 cdklocal deploy --all --require-approval never
