@@ -34,10 +34,6 @@ awslocal sns list-subscriptions-by-topic --topic-arn arn:aws:sns:us-east-1:00000
 echo "***** test-2-topic subscriptions *****"
 awslocal sns list-subscriptions-by-topic --topic-arn arn:aws:sns:us-east-1:000000000000:test-topic-2.fifo
 
-echo "***** delete sqs stack *****"
-cdklocal destroy --all --require-approval never
-
-
 echo "***** update sqs subscription to both test-topic and test-2-topic *****"
 cdklocal deploy --all --require-approval never --context subscriptionsContext=both
 
