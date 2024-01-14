@@ -26,7 +26,7 @@ echo "***** list topics *****"
 awslocal sns list-topics
 
 
-echo "***** deploy sqs with subscription to test-topic *****"
+echo "***** deploy sqs subscription to test-topic with filter policy of {\"eventType\": [\"first\"]} *****"
 cd ../../cdk/sqs
 cdklocal deploy --all --require-approval never  --context filterContext=first
 
@@ -35,7 +35,7 @@ subscription_arn=$(awslocal sns list-subscriptions-by-topic --topic-arn "$topic_
 attributes=$(awslocal sns get-subscription-attributes --subscription-arn "$subscription_arn" --output json)
 echo "$attributes" | jq -r '.Attributes.FilterPolicy'
 
-echo "***** update sqs subscription to both test-topic and test-2-topic *****"
+echo "***** update sqs subscription to test-topic with filter policy of {\"eventType\": [\"second\"]} *****"
 cdklocal deploy --all --require-approval never --context filterContext=second
 
 echo "***** test-topic subscriptions filter policy *****"
