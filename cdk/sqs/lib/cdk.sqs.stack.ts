@@ -10,18 +10,14 @@ export class CdkSqsStack extends Stack {
         id: string,
         private props: StackProps & {
             sqsName: string;
-            subscriptions: {
-                topicName: string;
-            }[];
+            subscription: { topicName: string; filterPolicy: {[attribute: string]: sns.SubscriptionFilter}};
         },
     ) {
         super(scope, id, props);
 
         const queue = this.createQueue();
 
-        for (const subscription of this.props.subscriptions) {
-            this.addSubscription(queue, subscription);
-        }
+        this.addSubscription(queue, this.props.subscription);
     }
 
     private createQueue(): sqs.Queue {
@@ -38,7 +34,7 @@ export class CdkSqsStack extends Stack {
 
     private addSubscription(
         queue: sqs.Queue,
-        subscription: { topicName: string; events?: string[]; environment?: string; filters?: { [key: string]: sns.SubscriptionFilter } },
+        subscription: { topicName: string; filterPolicy: {[attribute: string]: sns.SubscriptionFilter}},
     ) {
         const { topicName } = subscription;
 
@@ -48,6 +44,6 @@ export class CdkSqsStack extends Stack {
 
         const topic = sns.Topic.fromTopicArn(this, `find-topic-${topicName}`, topicArn);
 
-        return topic.addSubscription(new snsSubscriptions.SqsSubscription(queue));
+        return topic.addSubscription(new snsSubscriptions.SqsSubscription(queue, {filterPolicy: subscription.filterPolicy}));
     }
 }

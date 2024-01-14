@@ -13,12 +13,3 @@ new CdkServiceTopicsStack(app, `cdk-test-topic-stack`, {
     topicName: 'test-topic',
 });
 
-new CdkServiceTopicsStack(app, `cdk-test-2-topic-stack`, {
-    env: {
-        region: process.env.AWS_DEFAULT_REGION || 'us-east-1',
-        account: process.env.AWS_DEFAULT_ACCOUNT || '000000000000',
-    },
-    topicName: 'test-topic-2',
-});
-
-

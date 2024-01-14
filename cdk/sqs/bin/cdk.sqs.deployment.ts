@@ -2,15 +2,11 @@
 import * as cdk from 'aws-cdk-lib';
 import {CdkSqsStack} from "../lib/cdk.sqs.stack";
 const app = new cdk.App();
+import * as sns from 'aws-cdk-lib/aws-sns';
 
-const subscriptionsContext = app.node.tryGetContext('subscriptionsContext');
+const filterContext = app.node.tryGetContext('filterContext');
 
-const subscriptions = subscriptionsContext === 'both' ? [
-        {topicName: 'test-topic'},
-        {topicName: 'test-topic-2'}
-    ] :[
-    {topicName: 'test-topic'},
-]
+const subscription = {topicName: 'test-topic', filterPolicy: {'eventType': sns.SubscriptionFilter.stringFilter({allowlist: [filterContext]})}}
 
 new CdkSqsStack(app, `cdk-buyers-sqs`, {
     env: {
@@ -18,5 +14,5 @@ new CdkSqsStack(app, `cdk-buyers-sqs`, {
         account: process.env.AWS_DEFAULT_ACCOUNT || '000000000000',
     },
     sqsName: 'test-queue',
-    subscriptions,
+    subscription,
 });
