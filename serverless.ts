@@ -26,20 +26,6 @@ const ServerlessSqsSubscription = ({
     };
 };
 
-const functions: Record<string, any> = {};
-
-for (let i = 1; i <= 1; i++) {
-    const field = `api${i}`;
-    Object.assign(functions, {
-        [field]: {
-            timeout: 30,
-            handler: 'src/serverless.handler',
-            events: [{ sqs: ServerlessSqsSubscription({ sqsName: `test-queue-${i}`, fifo: true }) }],
-        },
-    });
-}
-
-
 const serverless = {
     service: 'test-service',
     plugins: [
@@ -109,7 +95,13 @@ const serverless = {
     package: {
         individually: true,
     },
-    functions
+    functions: {
+        api: {
+            timeout: 30,
+            handler: 'src/serverless.handler',
+            events: [{ sqs: ServerlessSqsSubscription({ sqsName: `test-queue-1`, fifo: true }) }],
+        },
+    }
 }
 
 module.exports = serverless;

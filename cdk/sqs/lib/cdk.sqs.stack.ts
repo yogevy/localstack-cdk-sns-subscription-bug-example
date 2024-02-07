@@ -59,7 +59,7 @@ export class CdkSqsStack extends Stack {
     }
 
     private addDeadLetterQueue(): sqs.Queue {
-        const { stage, sqsName, fifo } = this.props;
+        const { sqsName, fifo } = this.props;
 
         const dlqQueueName = `${sqsName}` + '-dlq';
 
