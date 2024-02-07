@@ -1,4 +1,4 @@
-import { Duration, Stack, StackProps } from 'aws-cdk-lib';
+import { Stack, StackProps } from 'aws-cdk-lib';
 import * as sns from 'aws-cdk-lib/aws-sns';
 import * as snsSubscriptions from 'aws-cdk-lib/aws-sns-subscriptions';
 import * as sqs from 'aws-cdk-lib/aws-sqs';
@@ -9,7 +9,6 @@ export class CdkSqsStack extends Stack {
         scope: Construct,
         id: string,
         private props: StackProps & {
-            stage: string;
             sqsName: string;
             fifo?: boolean;
             subscriptions: {
@@ -18,8 +17,6 @@ export class CdkSqsStack extends Stack {
                 events?: string[];
                 filters?: { [key: string]: sns.SubscriptionFilter };
             }[];
-            deadLetterQueue?: boolean;
-            visibilityTimeout?: number;
         },
     ) {
         super(scope, id, props);
@@ -32,7 +29,7 @@ export class CdkSqsStack extends Stack {
     }
 
     private createQueue(): sqs.Queue {
-        const { stage, sqsName, fifo, deadLetterQueue, visibilityTimeout } = this.props;
+        const { sqsName, fifo } = this.props;
 
         const queueProps: sqs.QueueProps = Object.assign(
             {},
@@ -43,37 +40,12 @@ export class CdkSqsStack extends Stack {
                 }
                 : {
                     queueName: `${sqsName}`,
-                },
-            deadLetterQueue && {
-                deadLetterQueue: {
-                    maxReceiveCount: 1,
-                    queue: this.addDeadLetterQueue(),
-                },
-            },
-            {
-                visibilityTimeout: Duration.seconds(visibilityTimeout ?? 120),
-            },
+                }
         );
 
-        return new sqs.Queue(this, `${sqsName}-queue-${stage}` + (fifo ? '.fifo' : ''), queueProps);
+        return new sqs.Queue(this, `${sqsName}-queue` + (fifo ? '.fifo' : ''), queueProps);
     }
 
-    private addDeadLetterQueue(): sqs.Queue {
-        const { sqsName, fifo } = this.props;
-
-        const dlqQueueName = `${sqsName}` + '-dlq';
-
-        const queueProps: sqs.QueueProps = fifo
-            ? {
-                queueName: dlqQueueName + '.fifo',
-                fifo: true,
-            }
-            : {
-                queueName: dlqQueueName,
-            };
-
-        return new sqs.Queue(this, `${sqsName}` + '-dlq' + (fifo ? '.fifo' : ''), queueProps);
-    }
 
     private addSubscriptions(
         queue: sqs.Queue,

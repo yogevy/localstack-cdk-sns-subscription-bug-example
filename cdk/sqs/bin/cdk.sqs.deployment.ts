@@ -10,7 +10,6 @@ new CdkSqsStack(app, `cdk-test-sqs-1`, {
         account: process.env.AWS_DEFAULT_ACCOUNT || '000000000000',
     },
     // tags: 'local',
-    stage: 'local',
     sqsName: 'test-queue-1',
     fifo: true,
     subscriptions: [
@@ -19,7 +18,6 @@ new CdkSqsStack(app, `cdk-test-sqs-1`, {
             events: ['event.type1', 'event.type2', 'event.type3'],
         }
     ],
-    deadLetterQueue: true,
 });
 
 
