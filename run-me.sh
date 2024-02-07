@@ -39,12 +39,12 @@ echo "***** test-topic subscriptions filter policy *****"
 subscription_arn=$(awslocal sns list-subscriptions-by-topic --topic-arn "$topic_arn" --output text --query 'Subscriptions[0].SubscriptionArn')
 attributes=$(awslocal sns get-subscription-attributes --subscription-arn "$subscription_arn" --output json)
 echo "$attributes" | jq -r '.Attributes.FilterPolicy'
-#
-#cd ../../
-#echo "***** deploy lambda *****"
-#serverless deploy --stage=local
-#
-#echo "**** Publishing dnd message with attribute of eventType equals to eventType1 ****"
+
+cd ../../
+echo "***** deploy lambda *****"
+serverless deploy --stage=local
+
+echo "**** Publishing dnd message with attribute of eventType equals to eventType1 ****"
 awslocal sns publish --topic-arn ${topic_arn} \
   --message "message 1" \
   --message-attributes '{"eventType":{"DataType":"String","StringValue":"event.type1"}}' \
@@ -52,6 +52,7 @@ awslocal sns publish --topic-arn ${topic_arn} \
   --message-deduplication-id "f176e085-6fd0-4995-be0c-40f58d199cde" \
   --region us-east-1
 
+sleep(5)
 
 awslocal sns publish --topic-arn ${topic_arn} \
   --message "message 2" \
@@ -60,13 +61,15 @@ awslocal sns publish --topic-arn ${topic_arn} \
   --message-deduplication-id "acbfc503-092e-436f-b63d-842db357bbf8" \
   --region us-east-1
 
-#awslocal sns publish --topic-arn ${topic_arn} \
-#  --message "message 3" \
-#  --message-attributes '{"eventType":{"DataType":"String","StringValue":"event.type3"}}' \
-#  --message-group-id "1" \
-#  --message-deduplication-id "75426805-ec7d-411d-a03d-63ad78b0c6ba" \
-#  --region us-east-1
-#
+sleep(5)
+
+awslocal sns publish --topic-arn ${topic_arn} \
+  --message "message 3" \
+  --message-attributes '{"eventType":{"DataType":"String","StringValue":"event.type3"}}' \
+  --message-group-id "1" \
+  --message-deduplication-id "3" \
+  --region us-east-1
+
 #echo "**** Publishing dnd message with attribute of eventType equals to eventType1 ****"
 #awslocal sns publish --topic-arn ${topic_arn_2} \
 #  --message "message 1" \
